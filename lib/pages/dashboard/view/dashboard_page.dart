@@ -30,7 +30,7 @@ class _DashboardView extends StatelessWidget {
       ),
       body: IndexedStack(
         index: selectedTab.index,
-        children: const [BatteryForm(), HouseConsumptionForm(), SolarForm()],
+        children: const [SolarForm(), HouseConsumptionForm(), BatteryForm()],
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -75,8 +75,9 @@ class _HomeTabButton extends StatelessWidget {
     return IconButton(
       onPressed: () => context.read<DashboardCubit>().setTab(value),
       iconSize: 32,
-      color:
-          groupValue != value ? null : Theme.of(context).colorScheme.secondary,
+      color: groupValue != value
+          ? Theme.of(context).colorScheme.onSurface
+          : Theme.of(context).colorScheme.primary,
       icon: icon,
     );
   }

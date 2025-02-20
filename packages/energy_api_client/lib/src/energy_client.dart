@@ -11,7 +11,7 @@ class EnergyApiClient {
 
   final Dio _dio;
 
-  Future<MonitoringDto> getMonitoring(
+  Future<List<MonitoringDataPointDto>> getMonitoring(
       {required String date, required String type}) async {
     try {
       final result = await runInIsolate(() async {
@@ -27,7 +27,9 @@ class EnergyApiClient {
           throw MonitoringFailure();
         }
 
-        return MonitoringDto.fromJson(response.data);
+        return (response.data as List<dynamic>)
+            .map((element) => MonitoringDataPointDto.fromJson(element))
+            .toList();
       });
 
       return result;

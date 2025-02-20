@@ -2,9 +2,6 @@ import 'package:energy_api_client/energy_api_client.dart';
 
 import '../energy_repository.dart';
 import 'data_type.dart';
-import 'repositories/battery_repository.dart';
-import 'repositories/house_consumption_repository.dart';
-import 'repositories/solar_repository.dart';
 
 class EnergyRepository
     implements SolarRepository, HouseConsumptionRepository, BatteryRepository {
@@ -58,7 +55,7 @@ class EnergyRepository
         type: dataType.name,
       );
 
-      return monitoringDto.data
+      return monitoringDto
           .map((dto) => MonitoringDataPoint.fromDto(dto))
           .toList();
     } on MonitoringFailure {

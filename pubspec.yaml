@@ -9,9 +9,12 @@ environment:
 dependencies:
   bloc: ^9.0.0
   equatable: ^2.0.7
+  energy_repository:
+    path: packages/energy_repository
   flutter:
     sdk: flutter
   flutter_bloc: ^9.0.0
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:

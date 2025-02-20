@@ -23,7 +23,8 @@ void main() {
     });
 
     group('getMonitoring', () {
-      test('returns MonitoringDto when the request is successful', () async {
+      test('returns List of MonitoringDto when the request is successful',
+          () async {
         final response = Response(
           data: {
             'data': [
@@ -43,10 +44,9 @@ void main() {
           type: 'type',
         );
 
-        expect(result, isA<MonitoringDto>());
-        expect(result.data.first.timestamp,
-            DateTime.parse('2021-10-01T00:00:00Z'));
-        expect(result.data.first.value, 100);
+        expect(result, isA<List<MonitoringDataPointDto>>());
+        expect(result.first.timestamp, DateTime.parse('2021-10-01T00:00:00Z'));
+        expect(result.first.value, 100);
       });
 
       test('throws MonitoringFailure when the request fails', () async {
