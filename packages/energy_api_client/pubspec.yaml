@@ -1,0 +1,20 @@
+name: energy_api_client
+description: "API Client for the Energy monitoring API"
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  dio: ^5.7.0
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  build_runner: ^2.4.14
+  flutter_lints: ^5.0.0
+  json_serializable: ^6.9.3
+  mocktail: ^1.0.4
+  test: ^1.25.8
+
+
