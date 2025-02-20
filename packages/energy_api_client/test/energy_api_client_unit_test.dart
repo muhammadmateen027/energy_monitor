@@ -38,7 +38,10 @@ void main() {
                 queryParameters: any(named: 'queryParameters')))
             .thenAnswer((_) async => response);
 
-        final result = await apiClient.getMonitoring('2021-10-01', 'type');
+        final result = await apiClient.getMonitoring(
+          date: '2021-10-01',
+          type: 'type',
+        );
 
         expect(result, isA<MonitoringDto>());
         expect(result.data.first.timestamp,
@@ -52,7 +55,10 @@ void main() {
             .thenThrow(DioException(requestOptions: RequestOptions(path: '')));
 
         expect(
-          () async => await apiClient.getMonitoring('2021-10-01', 'type'),
+          () async => await apiClient.getMonitoring(
+            date: '2021-10-01',
+            type: 'type',
+          ),
           throwsA(isA<MonitoringFailure>()),
         );
       });
@@ -70,7 +76,10 @@ void main() {
             .thenAnswer((_) async => response);
 
         expect(
-          () async => await apiClient.getMonitoring('2021-10-01', 'type'),
+          () async => await apiClient.getMonitoring(
+            date: '2021-10-01',
+            type: 'type',
+          ),
           throwsA(isA<MonitoringFailure>()),
         );
       });

@@ -11,7 +11,8 @@ class EnergyApiClient {
 
   final Dio _dio;
 
-  Future<MonitoringDto> getMonitoring(String date, String type) async {
+  Future<MonitoringDto> getMonitoring(
+      {required String date, required String type}) async {
     try {
       final result = await runInIsolate(() async {
         final response = await _dio.get(
@@ -31,6 +32,8 @@ class EnergyApiClient {
 
       return result;
     } on DioException {
+      throw MonitoringFailure();
+    } catch (e) {
       throw MonitoringFailure();
     }
   }

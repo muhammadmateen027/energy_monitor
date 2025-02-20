@@ -1,0 +1,17 @@
+name: energy_repository
+description: "Repository which manages the energy consumption of a solar panel."
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  equatable: ^2.0.7
+  energy_api_client:
+    path: ../energy_api_client
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.4
+  test: ^1.25.8
