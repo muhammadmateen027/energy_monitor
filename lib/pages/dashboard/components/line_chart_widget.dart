@@ -8,10 +8,12 @@ class LineChartWidget extends StatelessWidget {
     super.key,
     required this.data,
     required this.axisValues,
+    required this.lineColor,
   });
 
   final List<MonitoringPoint> data;
   final AxisValues axisValues;
+  final Color lineColor;
 
   DateTime date(double value) =>
       DateTime.fromMillisecondsSinceEpoch(value.toInt());
@@ -44,8 +46,7 @@ class LineChartWidget extends StatelessWidget {
                       return SizedBox();
                     } else {
                       return Container(
-                        margin:
-                            EdgeInsets.only(top: 8, bottom: 0), // Add some gap
+                        margin: EdgeInsets.only(top: 8, bottom: 0),
                         child: Text(
                           value.toString(),
                           style: TextStyle(
@@ -63,7 +64,6 @@ class LineChartWidget extends StatelessWidget {
                   showTitles: true,
                   reservedSize: 50,
                   getTitlesWidget: (value, meta) {
-                    // Show titles at intervals of 1000000000 (or any other interval you prefer)
                     if (value % 1000000 == 0) {
                       return Container(
                         margin: EdgeInsets.only(top: 5),
@@ -71,7 +71,7 @@ class LineChartWidget extends StatelessWidget {
                           DateTime.fromMillisecondsSinceEpoch(value.toInt())
                               .toLocal()
                               .toIso8601String()
-                              .substring(11, 16), // Format the date
+                              .substring(11, 16),
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 10,
@@ -79,7 +79,7 @@ class LineChartWidget extends StatelessWidget {
                         ),
                       );
                     } else {
-                      return Container(); // Return an empty container for other values
+                      return SizedBox();
                     }
                   },
                 ),
@@ -106,16 +106,16 @@ class LineChartWidget extends StatelessWidget {
                   getDotPainter: (spot, percent, barData, index) {
                     return FlDotCirclePainter(
                       radius: 4,
-                      color: Colors.blue,
+                      color: lineColor,
                       strokeWidth: 1,
                       strokeColor: Colors.white,
                     );
                   },
                 ),
-                color: Colors.blue,
+                color: lineColor,
                 belowBarData: BarAreaData(
                   show: true,
-                  color: Colors.blue.withValues(alpha: 0.1),
+                  color: lineColor.withValues(alpha: 0.1),
                 ),
               ),
             ],

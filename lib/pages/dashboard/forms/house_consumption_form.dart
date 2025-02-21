@@ -33,6 +33,7 @@ class _HouseConsumptionFormView extends StatelessWidget {
           return LineChartWidget(
             data: state.monitoringPoints,
             axisValues: state.axisValues,
+            lineColor: Colors.green,
             key: UniqueKey(),
           );
         } else {

@@ -31,6 +31,7 @@ class _BatteryFormView extends StatelessWidget {
           return LineChartWidget(
             data: state.monitoringPoints,
             axisValues: state.axisValues,
+            lineColor: Colors.blue,
             key: UniqueKey(),
           );
         } else {

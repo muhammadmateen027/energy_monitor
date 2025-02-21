@@ -31,6 +31,7 @@ class _SolarFormView extends StatelessWidget {
           return LineChartWidget(
             data: state.monitoringPoints,
             axisValues: state.axisValues,
+            lineColor: Colors.orange,
             key: UniqueKey(),
           );
         } else {
