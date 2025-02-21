@@ -6,9 +6,11 @@ import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
 import 'package:equatable/equatable.dart';
 
+import '../register/down_sampling_register.dart';
+
 part 'solar_state.dart';
 
-final class SolarCubit extends Cubit<SolarState> {
+final class SolarCubit extends Cubit<SolarState> with DownSamplingRegister {
   SolarCubit(this._solarRepository) : super(SolarState.initial());
 
   final SolarRepository _solarRepository;
@@ -29,31 +31,18 @@ final class SolarCubit extends Cubit<SolarState> {
       final monitorPoints =
           points.map((e) => MonitoringPoint.fromDto(e)).toList();
 
-      final downloadSmaples = downsampleData(monitorPoints);
+      final downSamplingData = downSampling(monitorPoints);
 
-      log('TotalAfter: ${downloadSmaples.length}');
       emit(
         state.copyWith(
           dataState: DataState.success,
-          monitoringPoints: downloadSmaples,
+          monitoringPoints: downSamplingData,
+          axisValues: AxisValues.fromData(downSamplingData),
         ),
       );
     } catch (e, s) {
       log('Exception: $e, S: $s');
       emit(state.copyWith(dataState: DataState.failure));
     }
-  }
-
-  List<MonitoringPoint> downsampleData(List<MonitoringPoint> data) {
-    final Map<int, MonitoringPoint> hourlyData = {};
-
-    for (var point in data) {
-      final hour = point.timestamp.hour;
-      if (!hourlyData.containsKey(hour)) {
-        hourlyData[hour] = point;
-      }
-    }
-
-    return hourlyData.values.toList();
   }
 }

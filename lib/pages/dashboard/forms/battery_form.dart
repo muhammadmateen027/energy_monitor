@@ -30,6 +30,7 @@ class _BatteryFormView extends StatelessWidget {
         } else if (state.dataState == DataState.success) {
           return LineChartWidget(
             data: state.monitoringPoints,
+            axisValues: state.axisValues,
             key: UniqueKey(),
           );
         } else {
