@@ -1,33 +1,33 @@
 part of 'house_consumption_cubit.dart';
 
-final class HouseConsumptionState extends Equatable {
+class HouseConsumptionState extends EnergyBaseState {
   const HouseConsumptionState({
-    required this.dataState,
-    required this.monitoringPoints,
-    required this.axisValues,
+    required super.dataState,
+    required super.monitoringPoints,
+    required super.axisValues,
+    super.unit,
   });
 
   HouseConsumptionState.initial()
-      : dataState = DataState.initial,
-        monitoringPoints = const <MonitoringPoint>[],
-        axisValues = AxisValues.defaultValues();
+      : super(
+          dataState: DataState.initial,
+          monitoringPoints: const <MonitoringPoint>[],
+          axisValues: AxisValues.defaultValues(),
+          unit: EnergyUnit.watts,
+        );
 
-  final DataState dataState;
-  final List<MonitoringPoint> monitoringPoints;
-  final AxisValues axisValues;
-
+  @override
   HouseConsumptionState copyWith({
     DataState? dataState,
     List<MonitoringPoint>? monitoringPoints,
     AxisValues? axisValues,
+    EnergyUnit? unit,
   }) {
     return HouseConsumptionState(
       dataState: dataState ?? this.dataState,
       monitoringPoints: monitoringPoints ?? this.monitoringPoints,
       axisValues: axisValues ?? this.axisValues,
+      unit: unit ?? this.unit,
     );
   }
-
-  @override
-  List<Object> get props => [dataState, monitoringPoints, axisValues];
 }

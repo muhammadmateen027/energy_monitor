@@ -12,7 +12,7 @@ class SolarForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          SolarCubit(context.read<SolarRepository>())..fetchData(),
+          SolarCubit(context.read<SolarRepository>())..fetchTodayData(),
       child: const _SolarFormView(),
     );
   }
@@ -28,7 +28,7 @@ class _SolarFormView extends StatelessWidget {
         if (state.dataState == DataState.loading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state.dataState == DataState.success) {
-          return LineChartWidget(
+          return LineChartContainer(
             data: state.monitoringPoints,
             axisValues: state.axisValues,
             lineColor: Colors.orange,

@@ -14,7 +14,7 @@ class HouseConsumptionForm extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           HouseConsumptionCubit(context.read<HouseConsumptionRepository>())
-            ..fetchData(),
+            ..fetchTodayData(),
       child: const _HouseConsumptionFormView(),
     );
   }
@@ -30,7 +30,7 @@ class _HouseConsumptionFormView extends StatelessWidget {
         if (state.dataState == DataState.loading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state.dataState == DataState.success) {
-          return LineChartWidget(
+          return LineChartContainer(
             data: state.monitoringPoints,
             axisValues: state.axisValues,
             lineColor: Colors.green,

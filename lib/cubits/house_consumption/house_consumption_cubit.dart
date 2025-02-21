@@ -1,27 +1,21 @@
-import 'package:bloc/bloc.dart';
+import 'package:energy_monitor/cubits/cubits.dart';
 import 'package:energy_monitor/models/models.dart';
 import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
-import 'package:equatable/equatable.dart';
-
-import '../register/down_sampling_register.dart';
 
 part 'house_consumption_state.dart';
 
-final class HouseConsumptionCubit extends Cubit<HouseConsumptionState>
-    with DownSamplingRegister {
+final class HouseConsumptionCubit
+    extends EnergyBaseCubit<HouseConsumptionState> {
   HouseConsumptionCubit(this._houseConsumptionRepository)
       : super(HouseConsumptionState.initial());
 
   final HouseConsumptionRepository _houseConsumptionRepository;
 
-  void fetchData({DateTime? dateTime}) {
-    final date = dateTime ?? DateTime.now();
+  void fetchTodayData() => fetchData(DateTime.now());
 
-    _fetchData(date);
-  }
-
-  Future<void> _fetchData(DateTime date) async {
+  @override
+  Future<void> fetchData(DateTime date) async {
     try {
       emit(state.copyWith(dataState: DataState.loading));
 
@@ -29,7 +23,7 @@ final class HouseConsumptionCubit extends Cubit<HouseConsumptionState>
           await _houseConsumptionRepository.getHouseConsumption(date);
 
       final monitorPoints =
-          points.map((e) => MonitoringPoint.fromDto(e)).toList();
+          points.map((e) => MonitoringPoint.fromDto(e, state.unit)).toList();
 
       final downSamplingData = downSampling(monitorPoints);
       emit(

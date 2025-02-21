@@ -12,7 +12,7 @@ class BatteryForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          BatteryCubit(context.read<BatteryRepository>())..fetchData(),
+          BatteryCubit(context.read<BatteryRepository>())..fetchTodayData(),
       child: const _BatteryFormView(),
     );
   }
@@ -28,7 +28,7 @@ class _BatteryFormView extends StatelessWidget {
         if (state.dataState == DataState.loading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state.dataState == DataState.success) {
-          return LineChartWidget(
+          return LineChartContainer(
             data: state.monitoringPoints,
             axisValues: state.axisValues,
             lineColor: Colors.blue,
