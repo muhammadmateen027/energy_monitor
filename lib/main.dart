@@ -9,6 +9,11 @@ import 'app/energy_monitor_app.dart';
 import 'cubits/register/down_sampling_register.dart';
 import 'energy_monitor_bloc_observer.dart';
 
+/// The entry point of the application.
+///
+/// This function sets up the necessary dependencies and runs the
+/// `EnergyMonitorApp` with the provided repositories and services.
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = const EnergyMonitorBlocObserver();

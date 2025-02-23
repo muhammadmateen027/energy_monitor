@@ -8,8 +8,18 @@ import 'connectivity_checker/connectivity_checker.dart';
 import 'data_parser/data_parser.dart';
 import 'data_type.dart';
 
+/// A repository that handles data operations for solar, house consumption,
+/// and battery consumption.
+///
+/// This class implements the `SolarRepository`, `HouseConsumptionRepository`,
+/// and `BatteryRepository` interfaces.
 class EnergyRepository
     implements SolarRepository, HouseConsumptionRepository, BatteryRepository {
+  /// Creates an instance of `EnergyRepository`.
+  ///
+  /// The [dataPointDao], [apiClient], and [internetConnection] parameters
+  /// are required. The [dataParser] parameter is optional and defaults to
+  /// `IsolateDataParser` if not provided.
   EnergyRepository({
     required MonitoringDataPointDao dataPointDao,
     required EnergyApiClient apiClient,
@@ -25,18 +35,25 @@ class EnergyRepository
   final DataParser _dataParser;
   final ConnectivityChecker _connectivityChecker;
 
+  /// Fetches solar generation data for the given [date].
   @override
   Future<List<MonitoringEnergy>> getSolarGeneration(DateTime date) =>
       _loadData(DataType.solar, date);
 
+  /// Fetches house consumption data for the given [date].
   @override
   Future<List<MonitoringEnergy>> getHouseConsumption(DateTime date) =>
       _loadData(DataType.house, date);
 
+  /// Fetches battery consumption data for the given [date].
   @override
   Future<List<MonitoringEnergy>> getBatteryConsumption(DateTime date) =>
       _loadData(DataType.battery, date);
 
+  /// Loads data for the given [dataType] and [date].
+  ///
+  /// This method first checks if local data is available. If not, it fetches
+  /// and stores remote data.
   Future<List<MonitoringEnergy>> _loadData(
       DataType dataType, DateTime date) async {
     try {
@@ -51,9 +68,11 @@ class EnergyRepository
     }
   }
 
+  /// Checks if local data is available for the given [dataType] and [date].
   Future<bool> _hasLocalData(DataType dataType, DateTime date) async =>
       await _dataPointDao.exists(dataType.name, date);
 
+  /// Retrieves local data for the given [dataType] and [date].
   Future<List<MonitoringEnergy>> _getLocalData(
       DataType dataType, DateTime date) async {
     final entries =
@@ -63,6 +82,7 @@ class EnergyRepository
         .toList();
   }
 
+  /// Fetches and stores remote data for the given [dataType] and [date].
   Future<List<MonitoringEnergy>> _fetchAndStoreRemoteData(
       DataType dataType, DateTime date) async {
     try {
@@ -79,6 +99,7 @@ class EnergyRepository
     }
   }
 
+  /// Stores the given [dataPoints] for the specified [dataType].
   Future<void> _storeDataPoints(
     List<MonitoringEnergy> dataPoints,
     DataType dataType,
@@ -88,14 +109,17 @@ class EnergyRepository
     await _dataPointDao.insertEntries(entries);
   }
 
+  /// Clears solar data from the local database.
   @override
   Future<void> clearSolarData() async =>
       _dataPointDao.deleteEntriesByCategory(DataType.solar.name);
 
+  /// Clears house consumption data from the local database.
   @override
   Future<void> clearHouseData() async =>
       _dataPointDao.deleteEntriesByCategory(DataType.house.name);
 
+  /// Clears battery data from the local database.
   @override
   Future<void> clearBatteryData() async =>
       _dataPointDao.deleteEntriesByCategory(DataType.battery.name);

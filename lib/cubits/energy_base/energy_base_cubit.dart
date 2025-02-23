@@ -9,13 +9,27 @@ import '../register/down_sampling_register.dart';
 
 part 'energy_base_state.dart';
 
+/// An abstract base class for Cubits that manage energy data.
+///
+/// This class provides common functionality for fetching, refreshing,
+/// and clearing energy data, as well as toggling the unit of measurement.
 abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T> {
+  /// Creates an instance of [EnergyBaseCubit].
+  ///
+  /// The [initialState] parameter is the initial state of the Cubit.
+  /// The [dataDownSampler] parameter is used for down-sampling the data.
   EnergyBaseCubit(super.initialState, this.dataDownSampler);
 
+  /// The [DataDownSampler] instance used for down-sampling the data.
   final DataDownSampler dataDownSampler;
 
+  /// Refreshes the energy data by calling [fetchData].
   void refreshData() => fetchData();
 
+  /// Fetches energy data for the given [date].
+  ///
+  /// If [date] is not provided, the current state's selected date is used.
+  /// Emits loading, success, or error states based on the result.
   Future<void> fetchData({DateTime? date}) async {
     emit(state.copyWith(
       dataState: DataState.loading(),
@@ -53,13 +67,19 @@ abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T> {
     }
   }
 
+  /// Generates axis values from the given [monitoringPoints].
   AxisValues _getAxisValues(List<MonitoringPoint> monitoringPoints) {
     return AxisValues.fromData(monitoringPoints);
   }
 
-  // Abstract method for repository calls in child cubits
+  /// Abstract method to fetch data from the repository.
+  ///
+  /// This method should be implemented by child Cubits to fetch specific data.
   Future<List<MonitoringEnergy>> getData(DateTime date);
 
+  /// Clears the energy data from the repository.
+  ///
+  /// Emits loading, success, or error states based on the result.
   Future<void> clearData() async {
     emit(state.copyWith(dataState: DataState.loading()) as T);
     try {
@@ -80,9 +100,14 @@ abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T> {
     }
   }
 
-  // Abstract method for repository calls in child cubits
+  /// Abstract method to clear data from the repository.
+  ///
+  /// This method should be implemented by child Cubits to clear specific data.
   Future<void> clearRepositoryData();
 
+  /// Toggles the unit of measurement between watts and kilowatts.
+  ///
+  /// Converts the current monitoring points to the new unit and updates the state.
   void toggleUnit() async {
     final newUnit =
         state.unit.isWatts ? EnergyUnit.kilowatts : EnergyUnit.watts;
@@ -102,6 +127,7 @@ abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T> {
     );
   }
 
+  /// Converts the given [points] to the specified [newUnit].
   static List<MonitoringPoint> _convertMonitoringPoints(
       List<MonitoringPoint> points, EnergyUnit newUnit) {
     return points.map((entry) => entry.copyWith(newUnit)).toList();
