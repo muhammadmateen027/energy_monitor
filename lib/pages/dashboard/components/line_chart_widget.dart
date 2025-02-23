@@ -42,7 +42,21 @@ class LineChartContainer extends StatelessWidget {
                 sideTitles: SideTitles(showTitles: false),
               ),
             ),
-            borderData: FlBorderData(show: true),
+            borderData: FlBorderData(
+              show: true,
+              border: Border(
+                left: BorderSide(
+                  color: lineColor.withValues(alpha: 0.5),
+                  width: 2,
+                ),
+                bottom: BorderSide(
+                  color: lineColor.withValues(alpha: 0.5),
+                  width: 2,
+                ),
+                right: BorderSide(color: Colors.transparent),
+                top: BorderSide(color: Colors.transparent),
+              ),
+            ),
             lineBarsData: [
               LineChartBar(
                 data: data,
@@ -66,7 +80,7 @@ class LineChartContainer extends StatelessWidget {
         showTitles: true,
         reservedSize: 50,
         getTitlesWidget: (value, meta) {
-          if (value == axisValues.maxY) {
+          if (value == axisValues.minY || value == axisValues.maxY) {
             return SizedBox();
           } else {
             return Container(

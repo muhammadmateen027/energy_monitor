@@ -1,45 +1,20 @@
 import 'package:energy_monitor/cubits/cubits.dart';
-import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../pages.dart';
+import 'base_energy_form.dart';
 
 class HouseConsumptionForm extends StatelessWidget {
   const HouseConsumptionForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseEnergyForm(
       create: (context) =>
           HouseConsumptionCubit(context.read<HouseConsumptionRepository>())
-            ..fetchTodayData(),
-      child: const _HouseConsumptionFormView(),
-    );
-  }
-}
-
-class _HouseConsumptionFormView extends StatelessWidget {
-  const _HouseConsumptionFormView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<HouseConsumptionCubit, HouseConsumptionState>(
-      builder: (context, state) {
-        if (state.dataState == DataState.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataState == DataState.success) {
-          return LineChartContainer(
-            data: state.monitoringPoints,
-            axisValues: state.axisValues,
-            lineColor: Colors.green,
-            key: UniqueKey(),
-          );
-        } else {
-          return const Center(child: Text('Failed to load data'));
-        }
-      },
+            ..fetchData(),
+      lineColor: Colors.green,
     );
   }
 }

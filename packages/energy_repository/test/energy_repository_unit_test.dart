@@ -45,7 +45,7 @@ void main() {
         final result = await energyRepository
             .getSolarGeneration(DateTime.parse('2021-10-01'));
 
-        expect(result, isA<List<MonitoringDataPoint>>());
+        expect(result, isA<List<MonitoringEnergy>>());
         expect(result.first.timestamp, DateTime.parse('2021-10-01T00:00:00Z'));
         expect(result.first.value, 100);
       });

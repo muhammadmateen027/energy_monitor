@@ -8,13 +8,18 @@ environment:
 
 dependencies:
   bloc: ^9.0.0
+  databases:
+    path: packages/databases
   equatable: ^2.0.7
+  energy_api_client:
+    path: packages/energy_api_client
   energy_repository:
     path: packages/energy_repository
   flutter:
     sdk: flutter
   flutter_bloc: ^9.0.0
   fl_chart: ^0.70.2
+  internet_connection_checker_plus: ^2.7.0
 
 dev_dependencies:
   flutter_test:

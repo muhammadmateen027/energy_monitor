@@ -24,7 +24,8 @@ class MonitoringDataPointDao extends DatabaseAccessor<AppDatabase>
     final entries = (select(monitoringDataPoint)
           ..where((tbl) =>
               tbl.category.equals(category) &
-              tbl.timeStamp.isBetweenValues(range.start, range.end)))
+              tbl.timeStamp.isBetweenValues(range.start, range.end))
+          ..orderBy([(t) => OrderingTerm(expression: t.timeStamp)]))
         .get();
 
     return entries;

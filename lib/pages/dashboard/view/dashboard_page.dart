@@ -25,37 +25,69 @@ class _DashboardView extends StatelessWidget {
         context.select((DashboardCubit cubit) => cubit.state.tab);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Energy Monitor'),
-      ),
-      body: IndexedStack(
-        index: selectedTab.index,
-        children: const [SolarForm(), HouseConsumptionForm(), BatteryForm()],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _HomeTabButton(
-              groupValue: selectedTab,
-              value: DashboardTab.solar,
-              icon: const Icon(Icons.solar_power),
-            ),
-            _HomeTabButton(
-              groupValue: selectedTab,
-              value: DashboardTab.house,
-              icon: const Icon(Icons.home),
-            ),
-            _HomeTabButton(
-              groupValue: selectedTab,
-              value: DashboardTab.battery,
-              icon: const Icon(Icons.battery_4_bar),
-            ),
-          ],
+        body: IndexedStack(
+          index: selectedTab.index,
+          children: const [SolarForm(), HouseConsumptionForm(), BatteryForm()],
         ),
-      ),
-    );
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, -2),
+              ),
+            ],
+          ),
+          child: BottomAppBar(
+            height: 70,
+            elevation: 0,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            shape: AutomaticNotchedShape(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _HomeTabButton(
+                  groupValue: selectedTab,
+                  value: DashboardTab.solar,
+                  icon: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.solar_power, size: 28),
+                      Text('Solar', style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                ),
+                _HomeTabButton(
+                  groupValue: selectedTab,
+                  value: DashboardTab.house,
+                  icon: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.home, size: 28),
+                      Text('House', style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                ),
+                _HomeTabButton(
+                  groupValue: selectedTab,
+                  value: DashboardTab.battery,
+                  icon: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.battery_4_bar, size: 28),
+                      Text('Battery', style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
 

@@ -7,10 +7,13 @@ environment:
   sdk: ^3.6.0
 
 dependencies:
+  databases:
+    path: ../databases
   dio: ^5.7.0
   equatable: ^2.0.7
   energy_api_client:
     path: ../energy_api_client
+  internet_connection_checker_plus: ^2.7.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0

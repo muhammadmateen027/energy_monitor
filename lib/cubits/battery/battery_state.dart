@@ -3,17 +3,19 @@ part of 'battery_cubit.dart';
 class BatteryState extends EnergyBaseState {
   const BatteryState({
     required super.dataState,
+    required super.selectedDate,
     required super.monitoringPoints,
     required super.axisValues,
     super.unit,
   });
 
-  BatteryState.initial()
+  BatteryState.initial(DateTime selectedDate)
       : super(
-          dataState: DataState.initial,
+          dataState: DataState.none(),
           monitoringPoints: const <MonitoringPoint>[],
           axisValues: AxisValues.defaultValues(),
           unit: EnergyUnit.watts,
+          selectedDate: selectedDate,
         );
 
   @override
@@ -22,12 +24,14 @@ class BatteryState extends EnergyBaseState {
     List<MonitoringPoint>? monitoringPoints,
     AxisValues? axisValues,
     EnergyUnit? unit,
+    DateTime? selectedDate,
   }) {
     return BatteryState(
       dataState: dataState ?? this.dataState,
       monitoringPoints: monitoringPoints ?? this.monitoringPoints,
       axisValues: axisValues ?? this.axisValues,
       unit: unit ?? this.unit,
+      selectedDate: selectedDate ?? this.selectedDate,
     );
   }
 }

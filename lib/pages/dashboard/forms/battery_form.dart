@@ -1,43 +1,19 @@
 import 'package:energy_monitor/cubits/cubits.dart';
-import 'package:energy_monitor/pages/dashboard/components/line_chart_widget.dart';
-import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'base_energy_form.dart';
 
 class BatteryForm extends StatelessWidget {
   const BatteryForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseEnergyForm(
       create: (context) =>
-          BatteryCubit(context.read<BatteryRepository>())..fetchTodayData(),
-      child: const _BatteryFormView(),
-    );
-  }
-}
-
-class _BatteryFormView extends StatelessWidget {
-  const _BatteryFormView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<BatteryCubit, BatteryState>(
-      builder: (context, state) {
-        if (state.dataState == DataState.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataState == DataState.success) {
-          return LineChartContainer(
-            data: state.monitoringPoints,
-            axisValues: state.axisValues,
-            lineColor: Colors.blue,
-            key: UniqueKey(),
-          );
-        } else {
-          return const Center(child: Text('Failed to load data'));
-        }
-      },
+          BatteryCubit(context.read<BatteryRepository>())..fetchData(),
+      lineColor: Colors.blue,
     );
   }
 }

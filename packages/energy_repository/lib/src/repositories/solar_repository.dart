@@ -7,7 +7,7 @@ abstract class SolarRepository {
   ///
   /// \param date The date for which to fetch the solar generation data.
   /// \returns A Future that resolves to a list of MonitoringDataPoint objects.
-  Future<List<MonitoringDataPoint>> getSolarGeneration(DateTime date);
+  Future<List<MonitoringEnergy>> getSolarGeneration(DateTime date);
 
   /// Clears all solar generation data.
   ///

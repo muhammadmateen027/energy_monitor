@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 
 import '../monitoring_point/monitoring_point.dart';
@@ -23,10 +25,17 @@ class AxisValues extends Equatable {
     final minX = data.first.timestamp.millisecondsSinceEpoch.toDouble();
     final maxX = data.last.timestamp.millisecondsSinceEpoch.toDouble();
 
-    final minY =
-        data.map((e) => e.value).reduce((a, b) => a < b ? a : b).toDouble() - 2;
-    final maxY =
-        data.map((e) => e.value).reduce((a, b) => a > b ? a : b).toDouble() + 2;
+    // Calculate Y-axis values with proper padding
+    final values = data.map((e) => e.value.toDouble());
+    final minValue = values.reduce(min);
+    final maxValue = values.reduce(max);
+
+    // Add 10% padding to min/max for better visualization
+    final range = maxValue - minValue;
+    final padding = range * 0.1;
+
+    final minY = (minValue - padding).roundToDouble();
+    final maxY = (maxValue + padding).roundToDouble();
 
     return AxisValues(minX: minX, maxX: maxX, minY: minY, maxY: maxY);
   }

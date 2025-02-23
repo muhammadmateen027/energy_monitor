@@ -7,7 +7,7 @@ abstract class HouseConsumptionRepository {
   ///
   /// \param date The date for which to fetch the house consumption data.
   /// \returns A Future that resolves to a list of MonitoringDataPoint objects.
-  Future<List<MonitoringDataPoint>> getHouseConsumption(DateTime date);
+  Future<List<MonitoringEnergy>> getHouseConsumption(DateTime date);
 
   /// Clears all house consumption data.
   ///

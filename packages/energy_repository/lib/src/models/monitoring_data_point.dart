@@ -1,16 +1,24 @@
+import 'package:databases/databases.dart';
 import 'package:energy_api_client/energy_api_client.dart';
 import 'package:equatable/equatable.dart';
 
-class MonitoringDataPoint extends Equatable {
-  const MonitoringDataPoint({
+class MonitoringEnergy extends Equatable {
+  const MonitoringEnergy({
     required this.timestamp,
     required this.value,
   });
 
-  factory MonitoringDataPoint.fromDto(MonitoringDataPointDto dto) {
-    return MonitoringDataPoint(
+  factory MonitoringEnergy.fromDto(MonitoringDataPointDto dto) {
+    return MonitoringEnergy(
       timestamp: dto.timestamp,
       value: dto.value,
+    );
+  }
+
+  factory MonitoringEnergy.fromDaoEntry(MonitoringDataPointEntry entry) {
+    return MonitoringEnergy(
+      timestamp: entry.timeStamp,
+      value: entry.value,
     );
   }
 

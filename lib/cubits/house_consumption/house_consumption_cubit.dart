@@ -8,33 +8,19 @@ part 'house_consumption_state.dart';
 final class HouseConsumptionCubit
     extends EnergyBaseCubit<HouseConsumptionState> {
   HouseConsumptionCubit(this._houseConsumptionRepository)
-      : super(HouseConsumptionState.initial());
+      : super(HouseConsumptionState.initial(DateTime.now()));
 
   final HouseConsumptionRepository _houseConsumptionRepository;
 
-  void fetchTodayData() => fetchData(DateTime.now());
+  void fetchTodayData() => fetchData();
 
   @override
-  Future<void> fetchData(DateTime date) async {
-    try {
-      emit(state.copyWith(dataState: DataState.loading));
+  Future<List<MonitoringEnergy>> getData(DateTime date) {
+    return _houseConsumptionRepository.getHouseConsumption(date);
+  }
 
-      final points =
-          await _houseConsumptionRepository.getHouseConsumption(date);
-
-      final monitorPoints =
-          points.map((e) => MonitoringPoint.fromDto(e, state.unit)).toList();
-
-      final downSamplingData = downSampling(monitorPoints);
-      emit(
-        state.copyWith(
-          dataState: DataState.success,
-          monitoringPoints: downSamplingData,
-          axisValues: AxisValues.fromData(downSamplingData),
-        ),
-      );
-    } on Exception {
-      emit(state.copyWith(dataState: DataState.failure));
-    }
+  @override
+  Future<void> clearRepositoryData() {
+    return _houseConsumptionRepository.clearHouseData();
   }
 }

@@ -1,50 +1,60 @@
+import 'package:flutter/foundation.dart';
+
 import '../../models/monitoring_point/monitoring_point.dart';
 
 mixin DownSamplingRegister {
-  List<MonitoringPoint> downSampling(List<MonitoringPoint> data) {
-    if (data.length <= 2) {
-      return data;
-    }
+  Future<List<MonitoringPoint>> downSampling(List<MonitoringPoint> data) async {
+    return await compute(_downSampling, data);
+  }
 
-    final int threshold = 100; // Adjust the threshold as needed
-    final List<MonitoringPoint> sampled = [data.first];
+  static List<MonitoringPoint> _downSampling(List<MonitoringPoint> data) {
+    if (data.length <= 2) return data;
 
-    final double bucketSize = (data.length - 2) / (threshold - 2);
-    int a = 0;
+    final threshold = 100;
+    final sampled = <MonitoringPoint>[data.first];
+    final bucketSize = (data.length - 2) / (threshold - 2);
+
+    // Pre-calculate timestamps to avoid repeated millisecondsSinceEpoch calls
+    final timestamps =
+        data.map((p) => p.timestamp.millisecondsSinceEpoch).toList();
+    var currentIndex = 0;
 
     for (int i = 0; i < threshold - 2; i++) {
-      final int rangeStart = (i * bucketSize).floor() + 1;
-      final int rangeEnd = ((i + 1) * bucketSize).floor() + 1;
+      final rangeStart = (i * bucketSize).floor() + 1;
+      final rangeEnd = ((i + 1) * bucketSize).floor() + 1;
 
-      final List<MonitoringPoint> range = data.sublist(rangeStart, rangeEnd);
+      // Calculate averages in single pass
+      var sumX = 0.0;
+      var sumY = 0.0;
+      final rangeLength = rangeEnd - rangeStart;
 
-      double avgX = 0;
-      double avgY = 0;
-      for (var point in range) {
-        avgX += point.timestamp.millisecondsSinceEpoch;
-        avgY += point.value;
+      for (var j = rangeStart; j < rangeEnd; j++) {
+        sumX += timestamps[j];
+        sumY += data[j].value;
       }
-      avgX /= range.length;
-      avgY /= range.length;
 
-      double maxArea = -1;
-      MonitoringPoint nextPoint = range.first;
+      final avgX = sumX / rangeLength;
+      final avgY = sumY / rangeLength;
 
-      for (var point in range) {
-        final double area = (data[a].timestamp.millisecondsSinceEpoch - avgX) *
-                (point.value - data[a].value) -
-            (data[a].timestamp.millisecondsSinceEpoch -
-                    point.timestamp.millisecondsSinceEpoch) *
-                (avgY - data[a].value);
+      // Find point with maximum area
+      var maxArea = -1.0;
+      var maxAreaPoint = data[rangeStart];
+      final baseX = timestamps[currentIndex];
+      final baseY = data[currentIndex].value;
+
+      for (var j = rangeStart; j < rangeEnd; j++) {
+        final point = data[j];
+        final area = (baseX - avgX) * (point.value - baseY) -
+            (baseX - timestamps[j]) * (avgY - baseY);
 
         if (area.abs() > maxArea) {
           maxArea = area.abs();
-          nextPoint = point;
+          maxAreaPoint = point;
         }
       }
 
-      sampled.add(nextPoint);
-      a = data.indexOf(nextPoint);
+      sampled.add(maxAreaPoint);
+      currentIndex = data.indexOf(maxAreaPoint);
     }
 
     sampled.add(data.last);

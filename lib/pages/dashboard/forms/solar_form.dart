@@ -1,43 +1,19 @@
 import 'package:energy_monitor/cubits/cubits.dart';
-import 'package:energy_monitor/pages/pages.dart';
-import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'base_energy_form.dart';
 
 class SolarForm extends StatelessWidget {
   const SolarForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseEnergyForm(
       create: (context) =>
-          SolarCubit(context.read<SolarRepository>())..fetchTodayData(),
-      child: const _SolarFormView(),
-    );
-  }
-}
-
-class _SolarFormView extends StatelessWidget {
-  const _SolarFormView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SolarCubit, SolarState>(
-      builder: (context, state) {
-        if (state.dataState == DataState.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataState == DataState.success) {
-          return LineChartContainer(
-            data: state.monitoringPoints,
-            axisValues: state.axisValues,
-            lineColor: Colors.orange,
-            key: UniqueKey(),
-          );
-        } else {
-          return const Center(child: Text('Failed to load data'));
-        }
-      },
+          SolarCubit(context.read<SolarRepository>())..fetchData(),
+      lineColor: Colors.red,
     );
   }
 }

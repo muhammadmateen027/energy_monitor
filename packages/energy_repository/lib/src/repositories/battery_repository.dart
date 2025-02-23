@@ -7,7 +7,7 @@ abstract class BatteryRepository {
   ///
   /// \param date The date for which to fetch the battery consumption data.
   /// \returns A Future that resolves to a list of MonitoringDataPoint objects.
-  Future<List<MonitoringDataPoint>> getBatteryConsumption(DateTime date);
+  Future<List<MonitoringEnergy>> getBatteryConsumption(DateTime date);
 
   /// Clears all battery consumption data.
   ///
