@@ -24,19 +24,19 @@ class $MonitoringDataPointTable extends MonitoringDataPoint
   late final GeneratedColumn<String> category = GeneratedColumn<String>(
       'category', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  static const VerificationMeta _timeStampMeta =
+      const VerificationMeta('timeStamp');
   @override
-  late final GeneratedColumn<DateTime> amount = GeneratedColumn<DateTime>(
-      'amount', aliasedName, false,
+  late final GeneratedColumn<DateTime> timeStamp = GeneratedColumn<DateTime>(
+      'time_stamp', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
   @override
-  late final GeneratedColumn<int> description = GeneratedColumn<int>(
-      'description', aliasedName, false,
+  late final GeneratedColumn<int> value = GeneratedColumn<int>(
+      'value', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, category, amount, description];
+  List<GeneratedColumn> get $columns => [id, category, timeStamp, value];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -57,19 +57,17 @@ class $MonitoringDataPointTable extends MonitoringDataPoint
     } else if (isInserting) {
       context.missing(_categoryMeta);
     }
-    if (data.containsKey('amount')) {
-      context.handle(_amountMeta,
-          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    if (data.containsKey('time_stamp')) {
+      context.handle(_timeStampMeta,
+          timeStamp.isAcceptableOrUnknown(data['time_stamp']!, _timeStampMeta));
     } else if (isInserting) {
-      context.missing(_amountMeta);
+      context.missing(_timeStampMeta);
     }
-    if (data.containsKey('description')) {
+    if (data.containsKey('value')) {
       context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
     } else if (isInserting) {
-      context.missing(_descriptionMeta);
+      context.missing(_valueMeta);
     }
     return context;
   }
@@ -85,10 +83,10 @@ class $MonitoringDataPointTable extends MonitoringDataPoint
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       category: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
-      amount: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}amount'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}description'])!,
+      timeStamp: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}time_stamp'])!,
+      value: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}value'])!,
     );
   }
 
@@ -102,20 +100,20 @@ class MonitoringDataPointEntry extends DataClass
     implements Insertable<MonitoringDataPointEntry> {
   final int id;
   final String category;
-  final DateTime amount;
-  final int description;
+  final DateTime timeStamp;
+  final int value;
   const MonitoringDataPointEntry(
       {required this.id,
       required this.category,
-      required this.amount,
-      required this.description});
+      required this.timeStamp,
+      required this.value});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['category'] = Variable<String>(category);
-    map['amount'] = Variable<DateTime>(amount);
-    map['description'] = Variable<int>(description);
+    map['time_stamp'] = Variable<DateTime>(timeStamp);
+    map['value'] = Variable<int>(value);
     return map;
   }
 
@@ -123,8 +121,8 @@ class MonitoringDataPointEntry extends DataClass
     return MonitoringDataPointCompanion(
       id: Value(id),
       category: Value(category),
-      amount: Value(amount),
-      description: Value(description),
+      timeStamp: Value(timeStamp),
+      value: Value(value),
     );
   }
 
@@ -134,8 +132,8 @@ class MonitoringDataPointEntry extends DataClass
     return MonitoringDataPointEntry(
       id: serializer.fromJson<int>(json['id']),
       category: serializer.fromJson<String>(json['category']),
-      amount: serializer.fromJson<DateTime>(json['amount']),
-      description: serializer.fromJson<int>(json['description']),
+      timeStamp: serializer.fromJson<DateTime>(json['timeStamp']),
+      value: serializer.fromJson<int>(json['value']),
     );
   }
   @override
@@ -144,27 +142,26 @@ class MonitoringDataPointEntry extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'category': serializer.toJson<String>(category),
-      'amount': serializer.toJson<DateTime>(amount),
-      'description': serializer.toJson<int>(description),
+      'timeStamp': serializer.toJson<DateTime>(timeStamp),
+      'value': serializer.toJson<int>(value),
     };
   }
 
   MonitoringDataPointEntry copyWith(
-          {int? id, String? category, DateTime? amount, int? description}) =>
+          {int? id, String? category, DateTime? timeStamp, int? value}) =>
       MonitoringDataPointEntry(
         id: id ?? this.id,
         category: category ?? this.category,
-        amount: amount ?? this.amount,
-        description: description ?? this.description,
+        timeStamp: timeStamp ?? this.timeStamp,
+        value: value ?? this.value,
       );
   MonitoringDataPointEntry copyWithCompanion(
       MonitoringDataPointCompanion data) {
     return MonitoringDataPointEntry(
       id: data.id.present ? data.id.value : this.id,
       category: data.category.present ? data.category.value : this.category,
-      amount: data.amount.present ? data.amount.value : this.amount,
-      description:
-          data.description.present ? data.description.value : this.description,
+      timeStamp: data.timeStamp.present ? data.timeStamp.value : this.timeStamp,
+      value: data.value.present ? data.value.value : this.value,
     );
   }
 
@@ -173,68 +170,68 @@ class MonitoringDataPointEntry extends DataClass
     return (StringBuffer('MonitoringDataPointEntry(')
           ..write('id: $id, ')
           ..write('category: $category, ')
-          ..write('amount: $amount, ')
-          ..write('description: $description')
+          ..write('timeStamp: $timeStamp, ')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, category, amount, description);
+  int get hashCode => Object.hash(id, category, timeStamp, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is MonitoringDataPointEntry &&
           other.id == this.id &&
           other.category == this.category &&
-          other.amount == this.amount &&
-          other.description == this.description);
+          other.timeStamp == this.timeStamp &&
+          other.value == this.value);
 }
 
 class MonitoringDataPointCompanion
     extends UpdateCompanion<MonitoringDataPointEntry> {
   final Value<int> id;
   final Value<String> category;
-  final Value<DateTime> amount;
-  final Value<int> description;
+  final Value<DateTime> timeStamp;
+  final Value<int> value;
   const MonitoringDataPointCompanion({
     this.id = const Value.absent(),
     this.category = const Value.absent(),
-    this.amount = const Value.absent(),
-    this.description = const Value.absent(),
+    this.timeStamp = const Value.absent(),
+    this.value = const Value.absent(),
   });
   MonitoringDataPointCompanion.insert({
     this.id = const Value.absent(),
     required String category,
-    required DateTime amount,
-    required int description,
+    required DateTime timeStamp,
+    required int value,
   })  : category = Value(category),
-        amount = Value(amount),
-        description = Value(description);
+        timeStamp = Value(timeStamp),
+        value = Value(value);
   static Insertable<MonitoringDataPointEntry> custom({
     Expression<int>? id,
     Expression<String>? category,
-    Expression<DateTime>? amount,
-    Expression<int>? description,
+    Expression<DateTime>? timeStamp,
+    Expression<int>? value,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (category != null) 'category': category,
-      if (amount != null) 'amount': amount,
-      if (description != null) 'description': description,
+      if (timeStamp != null) 'time_stamp': timeStamp,
+      if (value != null) 'value': value,
     });
   }
 
   MonitoringDataPointCompanion copyWith(
       {Value<int>? id,
       Value<String>? category,
-      Value<DateTime>? amount,
-      Value<int>? description}) {
+      Value<DateTime>? timeStamp,
+      Value<int>? value}) {
     return MonitoringDataPointCompanion(
       id: id ?? this.id,
       category: category ?? this.category,
-      amount: amount ?? this.amount,
-      description: description ?? this.description,
+      timeStamp: timeStamp ?? this.timeStamp,
+      value: value ?? this.value,
     );
   }
 
@@ -247,11 +244,11 @@ class MonitoringDataPointCompanion
     if (category.present) {
       map['category'] = Variable<String>(category.value);
     }
-    if (amount.present) {
-      map['amount'] = Variable<DateTime>(amount.value);
+    if (timeStamp.present) {
+      map['time_stamp'] = Variable<DateTime>(timeStamp.value);
     }
-    if (description.present) {
-      map['description'] = Variable<int>(description.value);
+    if (value.present) {
+      map['value'] = Variable<int>(value.value);
     }
     return map;
   }
@@ -261,8 +258,8 @@ class MonitoringDataPointCompanion
     return (StringBuffer('MonitoringDataPointCompanion(')
           ..write('id: $id, ')
           ..write('category: $category, ')
-          ..write('amount: $amount, ')
-          ..write('description: $description')
+          ..write('timeStamp: $timeStamp, ')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
@@ -286,15 +283,15 @@ typedef $$MonitoringDataPointTableCreateCompanionBuilder
     = MonitoringDataPointCompanion Function({
   Value<int> id,
   required String category,
-  required DateTime amount,
-  required int description,
+  required DateTime timeStamp,
+  required int value,
 });
 typedef $$MonitoringDataPointTableUpdateCompanionBuilder
     = MonitoringDataPointCompanion Function({
   Value<int> id,
   Value<String> category,
-  Value<DateTime> amount,
-  Value<int> description,
+  Value<DateTime> timeStamp,
+  Value<int> value,
 });
 
 class $$MonitoringDataPointTableFilterComposer
@@ -312,11 +309,11 @@ class $$MonitoringDataPointTableFilterComposer
   ColumnFilters<String> get category => $composableBuilder(
       column: $table.category, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get amount => $composableBuilder(
-      column: $table.amount, builder: (column) => ColumnFilters(column));
+  ColumnFilters<DateTime> get timeStamp => $composableBuilder(
+      column: $table.timeStamp, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnFilters(column));
+  ColumnFilters<int> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
 }
 
 class $$MonitoringDataPointTableOrderingComposer
@@ -334,11 +331,11 @@ class $$MonitoringDataPointTableOrderingComposer
   ColumnOrderings<String> get category => $composableBuilder(
       column: $table.category, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get amount => $composableBuilder(
-      column: $table.amount, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<DateTime> get timeStamp => $composableBuilder(
+      column: $table.timeStamp, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get description => $composableBuilder(
-      column: $table.description, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<int> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
 }
 
 class $$MonitoringDataPointTableAnnotationComposer
@@ -356,11 +353,11 @@ class $$MonitoringDataPointTableAnnotationComposer
   GeneratedColumn<String> get category =>
       $composableBuilder(column: $table.category, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get amount =>
-      $composableBuilder(column: $table.amount, builder: (column) => column);
+  GeneratedColumn<DateTime> get timeStamp =>
+      $composableBuilder(column: $table.timeStamp, builder: (column) => column);
 
-  GeneratedColumn<int> get description => $composableBuilder(
-      column: $table.description, builder: (column) => column);
+  GeneratedColumn<int> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
 }
 
 class $$MonitoringDataPointTableTableManager extends RootTableManager<
@@ -395,26 +392,26 @@ class $$MonitoringDataPointTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> category = const Value.absent(),
-            Value<DateTime> amount = const Value.absent(),
-            Value<int> description = const Value.absent(),
+            Value<DateTime> timeStamp = const Value.absent(),
+            Value<int> value = const Value.absent(),
           }) =>
               MonitoringDataPointCompanion(
             id: id,
             category: category,
-            amount: amount,
-            description: description,
+            timeStamp: timeStamp,
+            value: value,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String category,
-            required DateTime amount,
-            required int description,
+            required DateTime timeStamp,
+            required int value,
           }) =>
               MonitoringDataPointCompanion.insert(
             id: id,
             category: category,
-            amount: amount,
-            description: description,
+            timeStamp: timeStamp,
+            value: value,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

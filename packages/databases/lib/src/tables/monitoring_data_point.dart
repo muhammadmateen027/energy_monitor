@@ -6,7 +6,7 @@ class MonitoringDataPoint extends Table {
 
   TextColumn get category => text()();
 
-  DateTimeColumn get amount => dateTime()();
+  DateTimeColumn get timeStamp => dateTime()();
 
-  IntColumn get description => integer()();
+  IntColumn get value => integer()();
 }
