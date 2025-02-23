@@ -1,5 +1,4 @@
 import 'package:energy_monitor/cubits/cubits.dart';
-import 'package:energy_repository/energy_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,8 +10,7 @@ class BatteryForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseEnergyForm(
-      create: (context) =>
-          BatteryCubit(context.read<BatteryRepository>())..fetchData(),
+      create: (context) => BlocProvider.of<BatteryCubit>(context),
       lineColor: Colors.blue,
     );
   }

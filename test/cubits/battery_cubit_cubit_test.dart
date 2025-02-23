@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:energy_monitor/cubits/battery/battery_cubit.dart';
+import 'package:energy_monitor/cubits/register/down_sampling_register.dart';
 import 'package:energy_monitor/models/models.dart';
 import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
@@ -9,23 +10,25 @@ import 'package:mocktail/mocktail.dart';
 class MockBatteryRepository extends Mock implements BatteryRepository {}
 
 void main() {
-  group('BatteryCubit', () {
-    late BatteryCubit batteryCubit;
-    late MockBatteryRepository mockBatteryRepository;
-    final testDate = DateTime(2023, 1, 1);
+  late BatteryCubit batteryCubit;
+  late MockBatteryRepository mockBatteryRepository;
+  final testDate = DateTime(2023, 1, 1);
 
-    final testMonitoringEnergy = MonitoringEnergy(
-      timestamp: testDate,
-      value: 100,
+  final testMonitoringEnergy = MonitoringEnergy(
+    timestamp: testDate,
+    value: 100,
+  );
+
+  setUp(() {
+    mockBatteryRepository = MockBatteryRepository();
+    batteryCubit = BatteryCubit(
+      mockBatteryRepository,
+      DataDownSampler(),
     );
+  });
 
-    setUp(() {
-      mockBatteryRepository = MockBatteryRepository();
-      batteryCubit = BatteryCubit(mockBatteryRepository);
-    });
-
+  group('BatteryCubit', () {
     test('initial state is correct', () {
-      final initialState = BatteryState.initial(DateTime.now());
       expect(
         batteryCubit.state,
         isA<BatteryState>()

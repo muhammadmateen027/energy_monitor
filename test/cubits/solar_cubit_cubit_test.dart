@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:energy_monitor/cubits/register/down_sampling_register.dart';
 import 'package:energy_monitor/cubits/solar/solar_cubit.dart';
 import 'package:energy_monitor/models/models.dart';
 import 'package:energy_monitor/utils/utils.dart';
@@ -9,23 +10,22 @@ import 'package:mocktail/mocktail.dart';
 class MockSolarRepository extends Mock implements SolarRepository {}
 
 void main() {
+  late SolarCubit solarCubit;
+  late MockSolarRepository mockRepository;
+  final testDate = DateTime(2023, 1, 1);
+
+  final testMonitoringEnergy = MonitoringEnergy(
+    timestamp: testDate,
+    value: 100,
+  );
+
+  setUp(() {
+    mockRepository = MockSolarRepository();
+    solarCubit = SolarCubit(mockRepository, DataDownSampler());
+  });
+
   group('SolarCubit', () {
-    late SolarCubit solarCubit;
-    late MockSolarRepository mockRepository;
-    final testDate = DateTime(2023, 1, 1);
-
-    final testMonitoringEnergy = MonitoringEnergy(
-      timestamp: testDate,
-      value: 100,
-    );
-
-    setUp(() {
-      mockRepository = MockSolarRepository();
-      solarCubit = SolarCubit(mockRepository);
-    });
-
     test('initial state is correct', () {
-      final initialState = SolarState.initial(DateTime.now());
       expect(
         solarCubit.state,
         isA<SolarState>()

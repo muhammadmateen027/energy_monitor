@@ -3,10 +3,13 @@ import 'package:energy_monitor/models/models.dart';
 import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
 
+import '../register/down_sampling_register.dart';
+
 part 'solar_state.dart';
 
 final class SolarCubit extends EnergyBaseCubit<SolarState> {
-  SolarCubit(this._solarRepository) : super(SolarState.initial(DateTime.now()));
+  SolarCubit(this._solarRepository, DataDownSampler dataDownSampler)
+      : super(SolarState.initial(DateTime.now()), dataDownSampler);
 
   final SolarRepository _solarRepository;
 

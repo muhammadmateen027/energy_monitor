@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../models/monitoring_point/monitoring_point.dart';
 
-mixin DownSamplingRegister {
+class DataDownSampler {
   Future<List<MonitoringPoint>> downSampling(List<MonitoringPoint> data) async {
     return await compute(_downSampling, data);
   }

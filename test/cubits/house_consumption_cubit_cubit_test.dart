@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:energy_monitor/cubits/house_consumption/house_consumption_cubit.dart';
+import 'package:energy_monitor/cubits/register/down_sampling_register.dart';
 import 'package:energy_monitor/models/models.dart';
 import 'package:energy_monitor/utils/utils.dart';
 import 'package:energy_repository/energy_repository.dart';
@@ -10,23 +11,25 @@ class MockHouseConsumptionRepository extends Mock
     implements HouseConsumptionRepository {}
 
 void main() {
-  group('HouseConsumptionCubit', () {
-    late HouseConsumptionCubit houseConsumptionCubit;
-    late MockHouseConsumptionRepository mockRepository;
-    final testDate = DateTime(2023, 1, 1);
+  late HouseConsumptionCubit houseConsumptionCubit;
+  late MockHouseConsumptionRepository mockRepository;
+  final testDate = DateTime(2023, 1, 1);
 
-    final testMonitoringEnergy = MonitoringEnergy(
-      timestamp: testDate,
-      value: 100,
+  final testMonitoringEnergy = MonitoringEnergy(
+    timestamp: testDate,
+    value: 100,
+  );
+
+  setUp(() {
+    mockRepository = MockHouseConsumptionRepository();
+    houseConsumptionCubit = HouseConsumptionCubit(
+      mockRepository,
+      DataDownSampler(),
     );
+  });
 
-    setUp(() {
-      mockRepository = MockHouseConsumptionRepository();
-      houseConsumptionCubit = HouseConsumptionCubit(mockRepository);
-    });
-
+  group('HouseConsumptionCubit', () {
     test('initial state is correct', () {
-      final initialState = HouseConsumptionState.initial(DateTime.now());
       expect(
         houseConsumptionCubit.state,
         isA<HouseConsumptionState>()

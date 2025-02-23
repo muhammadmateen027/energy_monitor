@@ -31,7 +31,7 @@ class ChartHeader extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: lineColor.withOpacity(0.1),
+              color: lineColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(

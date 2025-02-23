@@ -9,9 +9,10 @@ import '../register/down_sampling_register.dart';
 
 part 'energy_base_state.dart';
 
-abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T>
-    with DownSamplingRegister {
-  EnergyBaseCubit(super.initialState);
+abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T> {
+  EnergyBaseCubit(super.initialState, this.dataDownSampler);
+
+  final DataDownSampler dataDownSampler;
 
   void refreshData() => fetchData();
 
@@ -24,7 +25,8 @@ abstract class EnergyBaseCubit<T extends EnergyBaseState> extends Cubit<T>
       final points = await getData(date ?? state.selectedDate);
       final monitorPoints =
           points.map((e) => MonitoringPoint.fromDto(e, state.unit)).toList();
-      final downSamplingData = await downSampling(monitorPoints);
+      final downSamplingData =
+          await dataDownSampler.downSampling(monitorPoints);
 
       emit(
         state.copyWith(

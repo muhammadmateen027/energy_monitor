@@ -21,7 +21,7 @@ class EnergyHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
       child: Column(
@@ -44,7 +44,6 @@ class EnergyHeader extends StatelessWidget {
 class _HeaderTitle extends StatelessWidget {
   const _HeaderTitle({
     required this.onRefresh,
-    super.key,
   });
 
   final VoidCallback onRefresh;
@@ -74,7 +73,6 @@ class _DateSelectionRow extends StatelessWidget {
     required this.selectedDate,
     required this.onDateSelected,
     required this.onClearData,
-    super.key,
   });
 
   final DateTime selectedDate;
